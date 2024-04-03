@@ -9,11 +9,11 @@ class Button:
         self.button.topleft = (x, y)
         self.clicked = False
 
-    def draw(self, screen):
-        pygame.draw.rect(screen, (110, 110, 110), self.button)
-        screen.blit(self.img, (self.button.x + 5, self.button.y + 5))
+    # def fix(self, screen):
+    #     pygame.draw.rect(screen, (110, 110, 110), self.button)
+    #     screen.blit(self.img, (self.button.x + 5, self.button.y + 5))
 
-    def hover(self, surface):
+    def draw(self, surface):
         action = False
         pos = pygame.mouse.get_pos()
         if self.button.collidepoint(pos):

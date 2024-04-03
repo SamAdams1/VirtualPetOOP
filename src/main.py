@@ -63,16 +63,16 @@ while running:
             running = False
 
     # render game here
-    # playButton.draw(screen)
-    if playButton.hover(screen) and petChoice != None:
+    # playButton.fix(screen)
+    if playButton.draw(screen) and petChoice != None:
         print(petChoice)
-    elif bluebird.hover(screen):
+    elif bluebird.draw(screen):
         print('blue')
         petChoice = bluebird
-    elif yellowbird.hover(screen):
+    elif yellowbird.draw(screen):
         print('yellow')
         petChoice = yellowbird
-    elif redbird.hover(screen):
+    elif redbird.draw(screen):
         print('red')
         petChoice = redbird
 
