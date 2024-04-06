@@ -1,7 +1,7 @@
 import pygame
-import button
+import gui
 
-class Pet(button.Button):
+class Pet(gui.Button):
     def __init__(self, name, color, x, y, img, hoverImg, sickImg=None) -> None:
         super().__init__(x, y, img, hoverImg)
         self.name = name
@@ -10,7 +10,7 @@ class Pet(button.Button):
 
         self.hungerLvl = 5 #0-5
         self.cleanLvl = 5 #0-5
-        self.mood = 'happy' #happy - sad - hungry
+        self.mood = 'happy' #happy - sad
     
     def feed(self, foodValue):
         self.hunger += foodValue
