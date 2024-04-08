@@ -7,6 +7,7 @@ class Node:
 class DoublyLinkedList:
     def __init__(self):
         self.head = None
+        self.pointer = None
 
     def append(self, data):
         new_node = Node(data)
@@ -35,7 +36,7 @@ class DoublyLinkedList:
         self.head.prev = new_node
         self.head = new_node
 
-    def delete_node(self, key):
+    def deleteNode(self, key):
         if self.head is None:
             return
         if self.head.data == key:
@@ -55,7 +56,7 @@ class DoublyLinkedList:
                 return
             current_node = current_node.next
 
-    def print_list(self):
+    def printList(self):
         if self.head is None:
             return
         current_node = self.head
@@ -86,3 +87,9 @@ def createCDLL(array):
     for i in array:
         dllist.append(i)
     return dllist
+
+# ex = createCDLL([1,2,3,4,5])
+# ex.pointer = ex.head
+# ex.prepend(6)
+# print(ex.pointer.data)
+# print(ex.head.data)

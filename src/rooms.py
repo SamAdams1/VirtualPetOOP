@@ -22,7 +22,7 @@ petChoice = bluebird
 
 
 #start menu
-startMenuTitle = pygame.image.load('images/buttons/title.png')
+startMenuTitle = pygame.image.load('images/titles/title.png')
 startLabel = pygame.image.load('images/buttons/start.png')
 startHover = pygame.image.load('images/buttons/startHover.png')
 startButton = gui.Button(475,650, startLabel,startHover)
@@ -31,25 +31,45 @@ startButton = gui.Button(475,650, startLabel,startHover)
 enterLabel = pygame.image.load('images/buttons/enter.png')
 enterHover = pygame.image.load('images/buttons/enterHover.png')
 enterButton = gui.Button(475,650, enterLabel,enterHover)
-enterNameTitle = pygame.image.load('images/entername.png')
-choosePetTitle = pygame.image.load('images/choosepet.png')
+enterNameTitle = pygame.image.load('images/titles/entername.png')
+choosePetTitle = pygame.image.load('images/titles/choosepet.png')
 
 
 #home
-homeImg = pygame.image.load('images/home.jpg')
+homeImg = pygame.image.load('images/backgrounds/home.jpg')
 homeImg = pygame.transform.scale(homeImg, (1200,800))
-homeLabel = pygame.image.load('images/buttons/home.png')
-homeHover = pygame.image.load('images/buttons/homeHover.png')
-homeButton = gui.Button(950,0, homeLabel,homeHover)
+sleepNormal = pygame.image.load('images/buttons/sleep.png')
+sleepHover = pygame.image.load('images/buttons/sleephover.png')
+sleepButton = gui.Button(475,645, sleepNormal,sleepHover)
 
 
 #vet
-vetImg = pygame.image.load('images/vet.jpg')
+vetImg = pygame.image.load('images/backgrounds/vet2.jpg')
 vetImg = pygame.transform.scale(vetImg, (1200,800))
-vetLabel = pygame.image.load('images/buttons/vet.png')
-vetHover = pygame.image.load('images/buttons/vetHover.png')
-vetButton = gui.Button(740,0, vetLabel,vetHover)
+treatNormal = pygame.image.load('images/buttons/treat.png')
+treatHover = pygame.image.load('images/buttons/treathover.png')
+treatButton = gui.Button(475,645, treatNormal,treatHover)
 
+#bathroom
+bathroomImg = pygame.image.load('images/backgrounds/bathroom.jpg')
+bathroomImg = pygame.transform.scale(bathroomImg, (1200,800))
+washNormal = pygame.image.load('images/buttons/wash.png')
+washHover = pygame.image.load('images/buttons/washhover.png')
+washButton = gui.Button(475,645, washNormal, washHover)
+
+#kitchen
+kitchenImg = pygame.image.load('images/backgrounds/kitchen.jpg')
+kitchenImg = pygame.transform.scale(kitchenImg, (1200,800))
+feedNormal = pygame.image.load('images/buttons/feed.png')
+feedHover = pygame.image.load('images/buttons/feedhover.png')
+feedButton = gui.Button(475,645, feedNormal,feedHover)
+
+#playroom
+playroomImg = pygame.image.load('images/backgrounds/playroom.jpg')
+playroomImg = pygame.transform.scale(playroomImg, (1200,800))
+playNormal = pygame.image.load('images/buttons/play.png')
+playHover = pygame.image.load('images/buttons/playhover.png')
+playButton = gui.Button(475,645, playNormal,playHover)
 
 
 #HUD
@@ -68,10 +88,15 @@ energyLabel = gui.Label(f"Energy: {petChoice.cleanLvl*20}%",'black',20,True, ene
 moodLabel = gui.Label(f"Mood: {petChoice.mood}",'black',20,True, 0, 235)
 
 # nxt room
-rightArrowImg = pygame.image.load('images/buttons/rightarrow.png')
-leftArrowImg = pygame.image.load('images/buttons/leftarrow.png')
-rightButton = gui.Button(1100,400, rightArrowImg,rightArrowImg)
-leftButton = gui.Button(0,400, leftArrowImg,leftArrowImg)
+rightArrowImg = pygame.image.load('images/buttons/right.png')
+rightHoverImg = pygame.image.load('images/buttons/righthover.png')
+rightButton = gui.Button(800,0, rightArrowImg,rightHoverImg)
+
+leftArrowImg = pygame.image.load('images/buttons/left.png')
+leftHoverImg = pygame.image.load('images/buttons/lefthover.png')
+leftButton = gui.Button(500,0, leftArrowImg,leftHoverImg)
+blankImg = pygame.image.load('images/buttons/blank.png')
+blankImg = pygame.transform.scale(blankImg, (800,99))
 
 
 
@@ -79,16 +104,12 @@ warningTxt = "example warning example warning example warning example warning"
 warningLabel = gui.Label('','red',40,True, 10,750)
 warningLabel.txt = warningTxt
 
-#determine which screen to show
-startMenu = True
-choosePetScreen = False
-enterNameScreen = False
-homeScreen = False
-vetScreen = False
 
 pygame.init()
 font = pygame.font.SysFont('Georgia', 40, bold=True)
-txtBox = pygame.Rect(483,590, 250,50) 
+txtBox = pygame.Rect(483,590, 250,50)
+
+
 def drawTxtBox(screen):
     pygame.draw.rect(screen, 'black', txtBox, 5)
     textInput = font.render(userTxtInput, True, 'black')
@@ -96,134 +117,141 @@ def drawTxtBox(screen):
 
     txtBox.w = max(250,textInput.get_width() + 10)
 
-# def warningLabel():
-#     warning = font.render(warningTxt, True, 'red')
-#     screen.blit(warning,(10,750))
-
-
 def drawPet(screen):
         petChoice.button.topleft = (440,225)
         petChoice.draw(screen)
 
+
+currentRoom = 'start'
+leftRoomLabel = gui.Label('Vet','black',30,True,490,25)
+currentRoomLabel = gui.Label(currentRoom,'black',30,True,640,25)
+rightRoomLabel = gui.Label('Bathroom','black',30,True,950,25)
+
 def nxtRoomBtns(screen):
-    rightButton.draw(screen)
-    leftButton.draw(screen)
-    roomlst = list(roomDict.keys())
-    roomIndex = 0
-    # if 
-    for index, i in enumerate(roomDict.keys()):
-        print(i, index)
-        if i == currentRoom:
-            roomIndex = index
-            print(roomIndex)
+    leftRoomLabel.txt = roomsDLL.pointer.prev.data
+    leftRoomLabel.x = 490 - leftRoomLabel.width
+    currentRoomLabel.txt = roomsDLL.pointer.data
+    # currentRoomLabel.x = 760 - currentRoomLabel.width *1.1
+    rightRoomLabel.txt = roomsDLL.pointer.next.data
 
-nameBg = pygame.Rect(0,0, 265,50)
+    if leftButton.draw(screen):
+        roomsDLL.pointer = roomsDLL.pointer.prev
+    if rightButton.draw(screen):
+        roomsDLL.pointer = roomsDLL.pointer.next
+    
+    currentRoomLabel.txt = roomsDLL.pointer.data
+
+
+nameLabelBg = pygame.Rect(0,0, 265,50)
+petNameLabel = gui.Label(petChoice.name, 'black',40,True,0,0)
+
+hudElements = [
+    healthbar, healthLabel,
+    hungerbar, hungerLabel,
+    cleanbar, cleanLabel,
+    energybar, energyLabel,
+    leftRoomLabel,currentRoomLabel,rightRoomLabel,
+    moodLabel,
+    petNameLabel,
+]
+
 def petHUD(screen):
-    pygame.draw.rect(screen, 'white', nameBg)
-    petName = gui.Label(petChoice.name, 'black',40,True,0,0)
-    petName.draw(screen)
-    nameBg.w = max(0,petName.width + 5)
-
-    healthbar.draw(screen)
-    healthLabel.draw(screen)
-    hungerbar.draw(screen)
-    hungerLabel.draw(screen)
-    cleanbar.draw(screen)
-    cleanLabel.draw(screen)
-    energybar.draw(screen)
-    energyLabel.draw(screen)
-    moodLabel.draw(screen)
-
-    # nxtRoomBtns(screen)
+    pygame.draw.rect(screen, 'white', nameLabelBg)
+    petNameLabel.txt = petChoice.name
+    nameLabelBg.w = max(0,petNameLabel.width + 5)
+    screen.blit(blankImg, (330,0))
+    
+    for item in hudElements:
+        item.draw(screen)
+    
+    nxtRoomBtns(screen)
 
 def displayRooms(screen):
-    if startMenu:
-        displayStartMenu(screen)
-    if choosePetScreen:
-        displayChoosePet(screen)
-    if enterNameScreen:
-        displayEnterNameScreen(screen)
-    if vetScreen:
-        displayVet(screen)
-    if homeScreen:
-        displayBedroom(screen)
-    if not (startMenu or choosePetScreen):
+    roomDict[currentRoomLabel.txt](screen)
+    if currentRoomLabel.txt != 'start' and currentRoomLabel.txt != 'choosePet':
         drawPet(screen)
+        if currentRoomLabel.txt != 'enterName':
+            petHUD(screen)
 
 def displayStartMenu(screen):
     screen.blit(startMenuTitle, (0,100))
     if startButton.draw(screen):
-        global startMenu, choosePetScreen
-        startMenu = False
-        choosePetScreen = True
+        global petChoice
+        petChoice = None
+        currentRoomLabel.txt = 'choosePet'
+        
 
 def displayChoosePet(screen):
     screen.blit(choosePetTitle,(150,50))
-    global petChoice, choosePetScreen, enterNameScreen, warningTxt
+    global petChoice
     if enterButton.draw(screen) and petChoice != None:
-        choosePetScreen = False
-        enterNameScreen = True
-        warningTxt = ''
-    elif bluebird.draw(screen):
+        currentRoomLabel.txt = 'enterName'
+        warningLabel.txt = ''
+    if bluebird.draw(screen):
         petChoice = bluebird
-        warningTxt = 'Choose the blue bird?'
-    elif yellowbird.draw(screen):
+        warningLabel.txt = 'Choose the blue bird?'
+    if yellowbird.draw(screen):
         petChoice = yellowbird
-        warningTxt = 'Choose the yellow bird?'
-    elif redbird.draw(screen):
+        warningLabel.txt = 'Choose the yellow bird?'
+    if redbird.draw(screen):
         petChoice = redbird
-        warningTxt = 'Choose the red bird?'
+        warningLabel.txt = 'Choose the red bird?'
 
 
-charLimit = 10
+
+charLimit = 12
 userTxtInput = ""
 def displayEnterNameScreen(screen):
     screen.blit(enterNameTitle,(0,50))
     drawTxtBox(screen)
     if enterButton.draw(screen):
         if len(userTxtInput) <= charLimit:
-            petChoice.name = userTxtInput
-            global warningTxt
-            warningTxt = ""
+            petChoice.name = str(userTxtInput)
+            warningLabel.txt = ""
             
-            global enterNameScreen, homeScreen
-            enterNameScreen = False
-            homeScreen = True
+            currentRoomLabel.txt = 'Bedroom'
         else:
-            warningTxt = f"Pet name cannot be over {charLimit} characters long."
+            warningLabel.txt = f"Pet name cannot be over {charLimit} characters long."
+
 
 def displayBedroom(screen):
     screen.blit(homeImg, (0,0))
-    petHUD(screen)
-    if vetButton.draw(screen):
-        global homeScreen, vetScreen
-        homeScreen = False
-        vetScreen = True
+    if sleepButton.draw(screen):
+        print("sleep")
 
 def displayBathroom(screen):
-    pass
+    screen.blit(bathroomImg, (0,0))
+    if washButton.draw(screen):
+        print("wash")
+
+
 def displayKitchen(screen):
-    pass
+    screen.blit(kitchenImg, (0,0))
+    if feedButton.draw(screen):
+        print("feed")
+
 def displayPlayroom(screen):
-    pass
+    screen.blit(playroomImg, (0,0))
+    if playButton.draw(screen):
+        print("play")
 
 def displayVet(screen):
     screen.blit(vetImg, (0,0))
-    petHUD(screen)
-    if homeButton.draw(screen):
-        global homeScreen, vetScreen
-        homeScreen = True
-        vetScreen = False
+    if treatButton.draw(screen):
+        print("treat")
 
 
-# currentRoom = 'Bedroom'
-# roomDict = {
-#     'start': displayStartMenu(),
-#     'choosePet': displayChoosePet(),
-#     'enterName': displayEnterNameScreen(),
-#     'Bedroom': displayBedroom(),
-#     'Bathroom': displayBathroom(),
-#     'Kitchen': displayKitchen(),
-#     'Playroom': displayPlayroom(),
-#     'Vet': displayVet(),
-# }
+roomDict = {
+    'start': displayStartMenu,
+    'choosePet': displayChoosePet,
+    'enterName': displayEnterNameScreen,
+    'Bedroom': displayBedroom,
+    'Bathroom': displayBathroom,
+    'Kitchen': displayKitchen,
+    'Playroom': displayPlayroom,
+    'Vet': displayVet
+}
+roomsDLL = dll.createCDLL(list(roomDict.keys())[3:])
+roomsDLL.pointer = roomsDLL.head
+
+# roomsDLL.printList()

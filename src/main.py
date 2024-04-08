@@ -7,13 +7,11 @@ pygame.init()
 
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 800
-
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 clock = pygame.time.Clock()
-clock.tick(60)  # limits FPS to 60
 
 pygame.display.set_caption('Virtual Pet Simulator')
-logo = pygame.image.load('images/buttons/windowlogo.png').convert_alpha()
+logo = pygame.image.load('images/titles/windowlogo.png')
 pygame.display.set_icon(logo)
 
 
@@ -30,13 +28,10 @@ while running:
             else:
                 rooms.userTxtInput += event.unicode
 
-    # render game here
     rooms.displayRooms(screen)
     rooms.warningLabel.draw(screen)
     # gui.drawCenteringLines()
 
-
+    clock.tick(60)  # limits FPS to 60
     pygame.display.update()
-
-
 pygame.quit()
