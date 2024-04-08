@@ -15,9 +15,9 @@ redBirdNormal = pygame.image.load('images/pets/red_bird_normal.png')
 redBirdHappy = pygame.image.load('images/pets/red_bird_happy.png')
 redBirdSick = pygame.image.load('images/pets/red_bird_yuck.png')
 
-bluebird = pet.Pet("Dan", "blue", 80,225, blueBirdNormal, blueBirdHappy)#240-160
-yellowbird = pet.Pet("Ian", "yellow", 440,225, yellowBirdNormal, yellowBirdHappy)#600-160
-redbird = pet.Pet("Jan", "red", 800,225, redBirdNormal, redBirdHappy)#960-160
+bluebird = pet.Pet("Dan", "blue", 80,225, blueBirdNormal, blueBirdHappy, 100, blueBirdSick)#240-160
+yellowbird = pet.Pet("Ian", "yellow", 440,225, yellowBirdNormal, yellowBirdHappy, 100, yellowBirdSick)#600-160
+redbird = pet.Pet("Jan", "red", 800,225, redBirdNormal, redBirdHappy, 100, redBirdSick)#960-160
 petChoice = bluebird
 
 
@@ -74,18 +74,21 @@ playButton = gui.Button(475,645, playNormal,playHover)
 
 #HUD
 healthbar = gui.HealthBar(0,55, 300,40,100, 'green')
-healthLabel = gui.Label(f"Health: {petChoice.hungerLvl*20}%",'black',20,True, healthbar.x, healthbar.y)
+healthLabel = gui.Label(f"Health: {petChoice.health}%",'black',20,True, healthbar.x, healthbar.y)
 
 hungerbar = gui.HealthBar(0,100, 300,40,100, 'royalblue')
-hungerLabel = gui.Label(f"Hunger: {petChoice.hungerLvl*20}%",'black',20,True, hungerbar.x, hungerbar.y)
+hungerLabel = gui.Label(f"Hunger: {petChoice.hungerLvl}%",'black',20,True, hungerbar.x, hungerbar.y)
 
 cleanbar = gui.HealthBar(0,145, 300,40,100, 'orange')
-cleanLabel = gui.Label(f"Cleanliness: {petChoice.cleanLvl*20}%",'black',20,True, cleanbar.x, cleanbar.y)
+cleanLabel = gui.Label(f"Cleanliness: {petChoice.cleanLvl}%",'black',20,True, cleanbar.x, cleanbar.y)
 
 energybar = gui.HealthBar(0,190, 300,40,100, 'yellow')
-energyLabel = gui.Label(f"Energy: {petChoice.cleanLvl*20}%",'black',20,True, energybar.x, energybar.y)
+energyLabel = gui.Label(f"Energy: {petChoice.energy}%",'black',20,True, energybar.x, energybar.y)
 
-moodLabel = gui.Label(f"Mood: {petChoice.mood}",'black',20,True, 0, 235)
+moodBar = gui.HealthBar(0,235, 300,40,100, 'purple')
+moodLabel = gui.Label(f"Mood: Happy",'black',20,True, 0, 235)
+
+
 
 # nxt room
 rightArrowImg = pygame.image.load('images/buttons/right.png')
@@ -104,6 +107,25 @@ warningTxt = "example warning example warning example warning example warning"
 warningLabel = gui.Label('','red',40,True, 10,750)
 warningLabel.txt = warningTxt
 
+nameLabelBg = pygame.Rect(0,0, 265,50)
+petNameLabel = gui.Label(petChoice.name, 'black',40,True,0,0)
+
+
+currentRoom = 'Bedroom'
+leftRoomLabel = gui.Label('Vet','black',30,True,490,25)
+currentRoomLabel = gui.Label(currentRoom,'black',30,True,640,25)
+rightRoomLabel = gui.Label('Bathroom','black',30,True,950,25)
+
+# draws elements on the screen
+hudElements = [
+    leftRoomLabel,currentRoomLabel,rightRoomLabel,
+    petNameLabel,
+    healthbar, healthLabel,
+    hungerbar, hungerLabel, 
+    cleanbar, cleanLabel, 
+    energybar, energyLabel,
+    moodBar, moodLabel,
+]
 
 pygame.init()
 font = pygame.font.SysFont('Georgia', 40, bold=True)
@@ -117,21 +139,26 @@ def drawTxtBox(screen):
 
     txtBox.w = max(250,textInput.get_width() + 10)
 
+intialStart = True
 def drawPet(screen):
-        petChoice.button.topleft = (440,225)
-        petChoice.draw(screen)
+    global intialStart
+    if intialStart:
+        petChoice.health -= 47
+        petChoice.hungerLvl -= 73
+        petChoice.cleanLvl -= 86
+        petChoice.energy -= 58
+        petChoice.moodLvl = 25
+        intialStart = False
+    petChoice.button.topleft = (440,225)
+    petChoice.draw(screen)
+    petChoice.img = petChoice.holdImg
 
 
-currentRoom = 'start'
-leftRoomLabel = gui.Label('Vet','black',30,True,490,25)
-currentRoomLabel = gui.Label(currentRoom,'black',30,True,640,25)
-rightRoomLabel = gui.Label('Bathroom','black',30,True,950,25)
+
 
 def nxtRoomBtns(screen):
     leftRoomLabel.txt = roomsDLL.pointer.prev.data
     leftRoomLabel.x = 490 - leftRoomLabel.width
-    currentRoomLabel.txt = roomsDLL.pointer.data
-    # currentRoomLabel.x = 760 - currentRoomLabel.width *1.1
     rightRoomLabel.txt = roomsDLL.pointer.next.data
 
     if leftButton.draw(screen):
@@ -142,18 +169,7 @@ def nxtRoomBtns(screen):
     currentRoomLabel.txt = roomsDLL.pointer.data
 
 
-nameLabelBg = pygame.Rect(0,0, 265,50)
-petNameLabel = gui.Label(petChoice.name, 'black',40,True,0,0)
 
-hudElements = [
-    healthbar, healthLabel,
-    hungerbar, hungerLabel,
-    cleanbar, cleanLabel,
-    energybar, energyLabel,
-    leftRoomLabel,currentRoomLabel,rightRoomLabel,
-    moodLabel,
-    petNameLabel,
-]
 
 def petHUD(screen):
     pygame.draw.rect(screen, 'white', nameLabelBg)
@@ -161,9 +177,10 @@ def petHUD(screen):
     nameLabelBg.w = max(0,petNameLabel.width + 5)
     screen.blit(blankImg, (330,0))
     
-    for item in hudElements:
-        item.draw(screen)
+    for element in hudElements:
+        element.draw(screen)
     
+    updateBarsnLbls()
     nxtRoomBtns(screen)
 
 def displayRooms(screen):
@@ -201,44 +218,110 @@ def displayChoosePet(screen):
 
 charLimit = 12
 userTxtInput = ""
+showBtn = True
 def displayEnterNameScreen(screen):
-    screen.blit(enterNameTitle,(0,50))
-    drawTxtBox(screen)
+    global showBtn
+    if showBtn:
+        screen.blit(enterNameTitle,(0,50))
+        drawTxtBox(screen)
     if enterButton.draw(screen):
         if len(userTxtInput) <= charLimit:
             petChoice.name = str(userTxtInput)
             warningLabel.txt = ""
             
+            showBtn = False
+            pygame.time.delay(100) #delay room change so sleep btn is not pressed
             currentRoomLabel.txt = 'Bedroom'
         else:
             warningLabel.txt = f"Pet name cannot be over {charLimit} characters long."
 
 
+
+class TimerData():
+    def __init__(self) -> None:
+        self.dimScreen = False
+        self.wait4sleep = False
+        self.sleepDelay = 1000
+        self.addEnergyVal = 1
+        self.addCleanVal = 3
+        self.reduceHungerVal = 10
+        self.addHealthVal = 10
+        self.addMoodVal = 25
+        # self.
+timers = TimerData()
+
+#timer events for pet interaction
+SLEEPTIMER = pygame.USEREVENT + 1
+
+
+# Create a transparent surface
+transparent_surface = pygame.Surface((1200, 800), pygame.SRCALPHA)
+transparent_surface.fill((10, 0, 0, 200))
+dimScreen = False
+sleepTimeWait = False
+
 def displayBedroom(screen):
     screen.blit(homeImg, (0,0))
+    if timers.dimScreen:
+        screen.blit(transparent_surface, (0,0))
+        petChoice.img = petChoice.hoverImg
+
+        if not timers.wait4sleep:
+            timers.wait4sleep = True
+            pygame.time.set_timer(SLEEPTIMER, timers.sleepDelay)
+
+    else:
+        petChoice.img = petChoice.holdImg
+
     if sleepButton.draw(screen):
-        print("sleep")
+        timers.dimScreen = not timers.dimScreen
+
+
+def updateEnergy():
+    petChoice.sleep(timers.addEnergyVal)
 
 def displayBathroom(screen):
     screen.blit(bathroomImg, (0,0))
     if washButton.draw(screen):
-        print("wash")
+        petChoice.wash(timers.addCleanVal)
+
 
 
 def displayKitchen(screen):
     screen.blit(kitchenImg, (0,0))
     if feedButton.draw(screen):
-        print("feed")
+        petChoice.feed(timers.reduceHungerVal)
+
 
 def displayPlayroom(screen):
     screen.blit(playroomImg, (0,0))
     if playButton.draw(screen):
-        print("play")
+        petChoice.play(timers.addMoodVal)
+
 
 def displayVet(screen):
     screen.blit(vetImg, (0,0))
     if treatButton.draw(screen):
-        print("treat")
+        petChoice.treat(timers.addHealthVal)
+
+def updateBarsnLbls():
+    healthbar.hp = petChoice.health
+    hungerbar.hp = petChoice.hungerLvl
+    cleanbar.hp = petChoice.cleanLvl
+    energybar.hp = petChoice.energy
+    moodBar.hp = petChoice.moodLvl
+
+    healthLabel.txt = f"Health: {petChoice.health}%"
+    hungerLabel.txt = f"Hunger: {petChoice.hungerLvl}%"
+    cleanLabel.txt = f"Cleanliness: {petChoice.cleanLvl}%"
+    energyLabel.txt = f"Energy: {petChoice.energy}%"
+
+    if moodBar.hp < petChoice.barMax // 2:
+        petChoice.mood = "Sad"
+    else:
+        petChoice.mood = "Happy"
+
+    moodLabel.txt = f"Mood: {petChoice.mood}"
 
 
 roomDict = {
@@ -252,6 +335,6 @@ roomDict = {
     'Vet': displayVet
 }
 roomsDLL = dll.createCDLL(list(roomDict.keys())[3:])
-roomsDLL.pointer = roomsDLL.head
+roomsDLL.pointer = roomsDLL.search(currentRoom)
 
 # roomsDLL.printList()

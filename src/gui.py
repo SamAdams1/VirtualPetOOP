@@ -75,6 +75,9 @@ class Label:
         self.width = label.get_width()
         screen.blit(label, (self.x, self.y))
 
+
+
+
 #helper function to center sprites
 def drawCenteringLines(screen):
     #vertical lines
