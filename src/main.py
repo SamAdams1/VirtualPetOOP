@@ -1,6 +1,4 @@
 import pygame
-import gui
-import pet
 import rooms
 
 pygame.init()
@@ -27,9 +25,6 @@ while running:
                 rooms.userTxtInput = rooms.userTxtInput[:-1]
             else:
                 rooms.userTxtInput += event.unicode
-        elif event.type == rooms.SLEEPTIMER and rooms.timers.dimScreen and rooms.currentRoomLabel.txt == 'Bedroom':
-            rooms.updateEnergy()
-            rooms.timers.wait4sleep = False
 
     
     rooms.displayRooms(screen)

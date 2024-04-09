@@ -11,10 +11,10 @@ class Pet(gui.Button):
         self.holdImg = img
         
         self.barMax = barMax
-        self.health = barMax 
+        self.healthLvl = barMax 
         self.hungerLvl = barMax
         self.cleanLvl = barMax
-        self.energy = barMax
+        self.energyLvl = barMax
         self.moodLvl = barMax
         self.mood = "Happy"
 
@@ -25,16 +25,16 @@ class Pet(gui.Button):
                 self.hungerLvl = self.barMax
     
     def sleep(self, sleepValue):
-        if self.energy < self.barMax:
-            self.energy += sleepValue
-            if self.energy > self.barMax:
-                self.energy = self.barMax
+        if self.energyLvl < self.barMax:
+            self.energyLvl += sleepValue
+            if self.energyLvl > self.barMax:
+                self.energyLvl = self.barMax
 
     def treat(self, treatmentVal):
-        if self.health < self.barMax:
-            self.health += treatmentVal
-            if self.health > self.barMax:
-                self.health = self.barMax
+        if self.healthLvl < self.barMax:
+            self.healthLvl += treatmentVal
+            if self.healthLvl > self.barMax:
+                self.healthLvl = self.barMax
 
     def play(self, playVal):
         if self.moodLvl < self.barMax:

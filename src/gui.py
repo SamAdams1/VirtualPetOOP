@@ -1,4 +1,5 @@
 import pygame
+from pygame.time import get_ticks
 
 class Button:
     def __init__(self, x, y, img, hoverImg) -> None:
@@ -41,7 +42,7 @@ class Button:
         return pet_surface  
 
 
-class HealthBar():
+class HealthBar:
     def __init__(self, x, y, width, height, maxHP, healthColor):
         self.x = x
         self.y = y
@@ -75,6 +76,33 @@ class Label:
         self.width = label.get_width()
         screen.blit(label, (self.x, self.y))
 
+
+class Timer:
+    def __init__(self, duration, repeat=False, autostart=False, func=None) -> None:
+        self.duration = duration
+        self.startTime = 0
+        self.active = False
+        self.repeat = repeat
+        self.func= func
+        if autostart:
+            self.activate()
+
+    def activate(self):
+        self.active = True
+        self.startTime = get_ticks()
+
+    def deactivate(self):
+        self.active = False
+        self.startTime = 0
+        if self.repeat:
+            self.activate()
+
+    def update(self):
+        if self.active:
+            currentTime = get_ticks()
+            if currentTime - self.startTime >= self.duration:
+                if self.func: self.func()
+                self.deactivate()
 
 
 
