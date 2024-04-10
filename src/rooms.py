@@ -76,16 +76,16 @@ playButton = gui.Button(BTN_X,BTN_Y, playNormal,playHover)
 
 #HUD
 healthbar = gui.HealthBar(0,55, 300,40,100, 'green')
-healthLabel = gui.Label(f"Health: {petChoice.healthLvl}%",'black',20,True, healthbar.x, healthbar.y)
+healthLabel = gui.Label(f"Health: {petChoice.stats['healthLvl']}%",'black',20,True, healthbar.x, healthbar.y)
 
 hungerbar = gui.HealthBar(0,100, 300,40,100, 'royalblue')
-hungerLabel = gui.Label(f"Hunger: {petChoice.hungerLvl}%",'black',20,True, hungerbar.x, hungerbar.y)
+hungerLabel = gui.Label(f"Hunger: {petChoice.stats['hungerLvl']}%",'black',20,True, hungerbar.x, hungerbar.y)
 
 cleanbar = gui.HealthBar(0,145, 300,40,100, 'orange')
-cleanLabel = gui.Label(f"Cleanliness: {petChoice.cleanLvl}%",'black',20,True, cleanbar.x, cleanbar.y)
+cleanLabel = gui.Label(f"Cleanliness: {petChoice.stats['cleanLvl']}%",'black',20,True, cleanbar.x, cleanbar.y)
 
 energybar = gui.HealthBar(0,190, 300,40,100, 'yellow')
-energyLabel = gui.Label(f"Energy: {petChoice.energyLvl}%",'black',20,True, energybar.x, energybar.y)
+energyLabel = gui.Label(f"Energy: {petChoice.stats['energyLvl']}%",'black',20,True, energybar.x, energybar.y)
 
 moodBar = gui.HealthBar(0,235, 300,40,100, 'purple')
 moodLabel = gui.Label(f"Mood: Happy",'black',20,True, 0, 235)
@@ -138,22 +138,22 @@ def drawTxtBox(screen):
 
     txtBox.w = max(250,textInput.get_width() + 10)
 
+
 intialStart = True
 def drawPet(screen):
     global intialStart
     if intialStart:
         intialStart = False
-        petChoice.healthLvl -= 47
-        petChoice.hungerLvl -= 73
-        petChoice.cleanLvl -= 86
-        petChoice.energyLvl -= 58
-        petChoice.moodLvl = 25
+        petChoice.stats['healthLvl'] -= 47
+        petChoice.stats['hungerLvl'] -= 73
+        petChoice.stats['cleanLvl'] -= 86
+        petChoice.stats['energyLvl'] -= 58
+        petChoice.stats['moodLvl'] = 25
 
     updateTimers()
     petChoice.button.topleft = (440,225)
     petChoice.draw(screen)
     petChoice.img = petChoice.holdImg
-
 
 
 def nxtRoomBtns(screen):
@@ -167,7 +167,6 @@ def nxtRoomBtns(screen):
         roomsDLL.pointer = roomsDLL.pointer.next
     
     currentRoomLabel.txt = roomsDLL.pointer.data
-
 
 
 def petHUD(screen):
@@ -189,7 +188,6 @@ def displayRooms(screen):
         drawPet(screen)
         if currentRoomLabel.txt != 'enterName':
             petHUD(screen)
-
 
 
 def displayStartMenu(screen):
@@ -217,7 +215,6 @@ def displayChoosePet(screen):
         warningLabel.txt = 'Choose the red bird?'
 
 
-
 charLimit = 12
 userTxtInput = ""
 showBtn = True
@@ -238,18 +235,6 @@ def displayEnterNameScreen(screen):
             warningLabel.txt = f"Pet name cannot be over {charLimit} characters long."
 
 
-
-class PetNeeds():
-    def __init__(self) -> None:
-        self.dimScreen = False
-
-        self.addEnergyVal = 1
-        self.addCleanVal = 3
-        self.reduceHungerVal = 10
-        self.addHealthVal = 10
-        self.addMoodVal = 25
-petNeeds = PetNeeds()
-
 # Create a transparent surface
 transparent_surface = pygame.Surface((1200, 800), pygame.SRCALPHA)
 transparent_surface.fill((10, 0, 0, 200))
@@ -258,82 +243,105 @@ sleepTimeWait = False
 
 def displayBedroom(screen):
     screen.blit(homeImg, (0,0))
-    if petNeeds.dimScreen:
+    if interactWPet['dim']:
         screen.blit(transparent_surface, (0,0))
         petChoice.img = petChoice.hoverImg
-
 
     else:
         petChoice.img = petChoice.holdImg
 
     if sleepButton.draw(screen):
-        petNeeds.dimScreen = not petNeeds.dimScreen
-        if petNeeds.dimScreen:
-            timers['sleep'].activate()
-        else:
-            timers['sleep'].deactivate()
-
-
+        interactWPet['dim'] = not interactWPet['dim']
+    if interactWPet['dim'] and not timers['sleep'].active:
+        timers['sleep'].activate()
+    elif not interactWPet['dim'] and timers['sleep'].active:
+        timers['sleep'].deactivate()
 
 
 def displayBathroom(screen):
+    timers['sleep'].deactivate()
     screen.blit(bathroomImg, (0,0))
     if washButton.draw(screen):
-        petChoice.wash(petNeeds.addCleanVal)
-
+        petChoice.changeStat('cleanLvl', interactWPet['addClean'])
 
 
 def displayKitchen(screen):
     screen.blit(kitchenImg, (0,0))
     if feedButton.draw(screen):
-        petChoice.feed(petNeeds.reduceHungerVal)
+        petChoice.changeStat('hungerLvl',interactWPet['reduceHunger'])
 
 
 def displayPlayroom(screen):
     screen.blit(playroomImg, (0,0))
     if playButton.draw(screen):
-        petChoice.play(petNeeds.addMoodVal)
+        petChoice.changeStat('moodLvl',interactWPet['addMood'])
 
 
 def displayVet(screen):
+    timers['sleep'].deactivate()
     screen.blit(vetImg, (0,0))
     if treatButton.draw(screen):
-        petChoice.treat(petNeeds.addHealthVal)
+        petChoice.changeStat('healthLvl',interactWPet['addHealth'])
+
 
 def updateBarsnLbls():
-    healthbar.hp = petChoice.healthLvl
-    hungerbar.hp = petChoice.hungerLvl
-    cleanbar.hp = petChoice.cleanLvl
-    energybar.hp = petChoice.energyLvl
-    moodBar.hp = petChoice.moodLvl
+    healthbar.hp = petChoice.stats['healthLvl']
+    hungerbar.hp = petChoice.stats['hungerLvl']
+    cleanbar.hp = petChoice.stats['cleanLvl']
+    energybar.hp = petChoice.stats['energyLvl']
+    moodBar.hp = petChoice.stats['moodLvl']
 
-    healthLabel.txt = f"Health: {petChoice.healthLvl}%"
-    hungerLabel.txt = f"Hunger: {petChoice.hungerLvl}%"
-    cleanLabel.txt = f"Cleanliness: {petChoice.cleanLvl}%"
-    energyLabel.txt = f"Energy: {petChoice.energyLvl}%"
+    healthLabel.txt = f"Health: {petChoice.stats['healthLvl']}%"
+    hungerLabel.txt = f"Hunger: {petChoice.stats['hungerLvl']}%"
+    cleanLabel.txt = f"Cleanliness: {petChoice.stats['cleanLvl']}%"
+    energyLabel.txt = f"Energy: {petChoice.stats['energyLvl']}%"
 
     if moodBar.hp < petChoice.barMax // 2:
-        petChoice.mood = "Sad"
+        petChoice.stats['mood'] = "Sad"
     else:
-        petChoice.mood = "Happy"
+        petChoice.stats['mood'] = "Happy"
 
-    moodLabel.txt = f"Mood: {petChoice.mood}"
+    moodLabel.txt = f"Mood: {petChoice.stats['mood']}"
 
 
+# petChoice.stats['healthLvl']
 def updateEnergy():
-    petChoice.sleep(petNeeds.addEnergyVal*-1)
+    petChoice.changeStat('energyLvl',interactWPet['addEnergy'])
 
 def updateTimers():
-    for i in timers.keys():
-        timers[i].update()
+    for key in timers.keys():
+        timers[key].update()
+
+def lowerStats(statKey, reduceKey):
+    petChoice.changeStat(statKey, reduceStats[reduceKey])
+
+
+interactWPet = {
+    'dim': False,
+    'addEnergy': 3,
+    'addClean': 7,
+    'reduceHunger': 9,
+    'addHealth': 13,
+    'addMood': 11,
+}
+reduceStats = {
+    'reduceEnergy': -1,
+    'reduceClean': -1,
+    'addHunger': -1,
+    'reduceHealth': -3,
+    'reduceMood': -2,
+}
 
 timers = {
+    #increases stat
     'sleep': gui.Timer(1000, func=updateEnergy, repeat=True),
-    'health': gui.Timer(10000, func=updateEnergy, repeat=True, autostart=True),
-    'hunger': gui.Timer(10000, func=updateEnergy, repeat=True, autostart=True),
-    'clean': gui.Timer(10000, func=updateEnergy, repeat=True, autostart=True),
-    'energy': gui.Timer(10000, func=updateEnergy, repeat=True, autostart=True),
-    'mood': gui.Timer(10000, func=updateEnergy, repeat=True, autostart=True),
+
+    #lowers stat
+    'energy': gui.Timer(10000, func=lambda: lowerStats('energyLvl', 'reduceEnergy'), repeat=True, autostart=True),
+    'health': gui.Timer(20000, func=lambda: lowerStats('healthLvl', 'reduceHealth'), repeat=True, autostart=True),
+    'hunger': gui.Timer(8000, func=lambda: lowerStats('hungerLvl', 'addHunger'), repeat=True, autostart=True),
+    'clean': gui.Timer(5000, func=lambda: lowerStats('cleanLvl', 'reduceClean'), repeat=True, autostart=True),
+    'mood': gui.Timer(15000, func=lambda: lowerStats('moodLvl', 'reduceMood'), repeat=True, autostart=True),
 }
 
 roomDict = {
@@ -348,5 +356,30 @@ roomDict = {
 }
 roomsDLL = dll.createCDLL(list(roomDict.keys())[3:])
 roomsDLL.pointer = roomsDLL.search(currentRoom)
-
 # roomsDLL.printList()
+
+
+# def lowerStats(stat, val):
+#     petChoice.changeStat(stat, val)
+
+# def updateTimers():
+#     for i in timers.keys():
+#         timers[i].update()
+
+# interactWPet = {
+#     'dim': False,
+#     'addEnergy': 2,
+#     'addClean': 6,
+#     'reduceHunger': 9,
+#     'addHealth': 13,
+#     'addMood': 12,
+# }
+
+# timers = {
+#     'sleep': gui.Timer(1000, func=lowerStats('energyLvl', interactWPet['addEnergy']*-1), repeat=True),
+# #     'health': gui.Timer(10000, func=lowerStats('healthLvl', interactWPet[key]), repeat=True, autostart=True),
+# #     'hunger': gui.Timer(10000, func=lowerStats('hungerLvl', interactWPet[key]), repeat=True, autostart=True),
+# #     'clean': gui.Timer(10000, func=lowerStats('cleanLvl', interactWPet[key]), repeat=True, autostart=True),
+# #     'energy': gui.Timer(10000, func=lowerStats(stat, interactWPet[key]), repeat=True, autostart=True),
+# #     'mood': gui.Timer(10000, func=lowerStats(stat, interactWPet[key]), repeat=True, autostart=True),
+# }

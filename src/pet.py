@@ -9,41 +9,21 @@ class Pet(gui.Button):
         self.hat = None
 
         self.holdImg = img
-        
         self.barMax = barMax
-        self.healthLvl = barMax 
-        self.hungerLvl = barMax
-        self.cleanLvl = barMax
-        self.energyLvl = barMax
-        self.moodLvl = barMax
-        self.mood = "Happy"
+        self.stats ={
+            'healthLvl': barMax,
+            'hungerLvl': barMax,
+            'cleanLvl': barMax,
+            'energyLvl': barMax,
+            'moodLvl': barMax,
+            'mood': 'happy',
+        }
+    def changeStat(self, statIndex, value):
+        if self.stats[statIndex] <= self.barMax:
+            self.stats[statIndex] += value
+            #dont allow stats to go over or under 0/100
+            if self.stats[statIndex] > self.barMax:
+                self.stats[statIndex] = self.barMax
+            elif self.stats[statIndex] < 0:
+                self.stats[statIndex] = 0
 
-    def feed(self, foodValue):
-        if self.hungerLvl < self.barMax:
-            self.hungerLvl += foodValue
-            if self.hungerLvl > self.barMax:
-                self.hungerLvl = self.barMax
-    
-    def sleep(self, sleepValue):
-        if self.energyLvl < self.barMax:
-            self.energyLvl += sleepValue
-            if self.energyLvl > self.barMax:
-                self.energyLvl = self.barMax
-
-    def treat(self, treatmentVal):
-        if self.healthLvl < self.barMax:
-            self.healthLvl += treatmentVal
-            if self.healthLvl > self.barMax:
-                self.healthLvl = self.barMax
-
-    def play(self, playVal):
-        if self.moodLvl < self.barMax:
-            self.moodLvl += playVal
-            if self.moodLvl > self.barMax:
-                self.moodLvl = self.barMax
-
-    def wash(self, washVal):
-        if self.cleanLvl < self.barMax:
-            self.cleanLvl += washVal
-            if self.cleanLvl > self.barMax:
-                self.cleanLvl = self.barMax
