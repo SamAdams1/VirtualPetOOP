@@ -1,5 +1,7 @@
 import pygame
+import json
 import rooms
+
 
 pygame.init()
 
@@ -19,7 +21,13 @@ while running:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            print(rooms.petChoice)
+            rooms.updateSaveData()
+            print('quiting')
+            with open('save.txt', 'w') as store_data:
+                json.dump(rooms.saveData, store_data)
             running = False
+            
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_BACKSPACE:
                 rooms.userTxtInput = rooms.userTxtInput[:-1]

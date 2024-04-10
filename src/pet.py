@@ -9,14 +9,14 @@ class Pet(gui.Button):
         self.hat = None
 
         self.holdImg = img
+        self.sickImg = sickImg
         self.barMax = barMax
-        self.stats ={
-            'healthLvl': barMax,
-            'hungerLvl': barMax,
-            'cleanLvl': barMax,
-            'energyLvl': barMax,
-            'moodLvl': barMax,
-            'mood': 'happy',
+        self.stats = {
+            'health': barMax,
+            'hunger': barMax,
+            'clean': barMax,
+            'energy': barMax,
+            'mood': barMax,
         }
     def changeStat(self, statIndex, value):
         if self.stats[statIndex] <= self.barMax:

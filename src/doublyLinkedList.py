@@ -76,12 +76,12 @@ class DoublyLinkedList:
             stopper = stopper.next
 
             if startpoint.data == stopper.data and startpoint.prev.data == stopper.prev.data and startpoint.next.data == stopper.next.data:
-                raise SearchFailed("Value does not exist, whole list traveled.")
+                raise SearchFailed(f"{value} does not exist, whole list traveled.")
 
 class SearchFailed(Exception):
     pass
 
-# create Circular Doubly Linked List
+# create(C)ircular(D)oubly(L)inked(L)ist
 def createCDLL(array):
     dllist = DoublyLinkedList()
     for i in array:
