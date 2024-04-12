@@ -39,6 +39,6 @@ while running:
     rooms.warningLabel.draw(screen)
     # gui.drawCenteringLines()
 
-    clock.tick(60)# limits FPS to 60
+    clock.tick(60)# limits FPS to 30
     pygame.display.update()
 pygame.quit()

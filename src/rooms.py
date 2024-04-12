@@ -27,6 +27,7 @@ birds = {
 }
 petChoice = birds['blue']
 
+
 saveData = {
     'name': '',
     'pet': None,
@@ -52,6 +53,7 @@ except:
     # create the file and store initial values 
     with open('save.txt', 'w') as store_file: 
         json.dump(saveData, store_file)
+
 
 BTN_X = 475
 BTN_Y = 635
@@ -107,6 +109,15 @@ playButton = gui.Button(BTN_X,BTN_Y, playNormal,playHover)
 #items
 thermometer = pygame.image.load('images/items/thermometer.png')
 thermometer = pygame.transform.scale(thermometer, (200,200))
+
+hungerBubble = pygame.image.load('images/items/hungerbubble.png')
+hungerBubble = pygame.transform.scale(hungerBubble, (200,200))
+
+stinky = pygame.image.load('images/items/stinky.png')
+stinky = pygame.transform.scale(stinky, (500,500))
+
+tear = pygame.image.load('images/items/tear.png')
+tear = pygame.transform.scale(tear, (35,50))
 
 #HUD
 healthbar = gui.HealthBar(0,55, 300,40,100, 'green')
@@ -175,23 +186,24 @@ def drawTxtBox(screen):
 
 intialStart = True
 def drawPet(screen):
-    firstStart()
-
-    petAccessories(screen)
-    updateTimers()
     petChoice.button.topleft = (440,225)
+    petAccessories(screen)
     petChoice.draw(screen)
-    petChoice.img = petChoice.holdImg
+    petChoice.img = petChoice.holdImg # if change rooms while sleeping changes back to open eye
+    if moodBar.hp < petChoice.barMax // 3:
+        screen.blit(tear, (580, 360))
 
 def petAccessories(screen):
-    if healthbar.hp < petChoice.barMax // 2:
+    petChoice.disabled = False
+    if healthbar.hp < petChoice.barMax // 3:
         screen.blit(thermometer, (320, 370))
-    # if hungerbar.hp < petChoice.barMax // 2:
-    #     screen.blit(thermometer, (320, 370))
-    # if cleanbar.hp < petChoice.barMax // 2:
-    #     screen.blit(thermometer, (320, 370))
-    # if energybar.hp < petChoice.barMax // 2:
-    #     screen.blit(thermometer, (320, 370))
+    if hungerbar.hp < petChoice.barMax // 3:
+        screen.blit(hungerBubble, (350, 120))
+    if cleanbar.hp < petChoice.barMax // 3:
+        screen.blit(stinky, (550, 80))
+    if energybar.hp < petChoice.barMax // 3 and interactWPet['dim'] == False:
+        petChoice.img = petChoice.sickImg
+        petChoice.disabled = True
 
 def firstStart():
     global intialStart
@@ -199,7 +211,9 @@ def firstStart():
         intialStart = False
         loadSave()
         for key in petChoice.stats.keys():
-            petChoice.changeStat(key, -1*random.randrange(10,50))
+            num = random.randrange(10,30)
+            petChoice.changeStat(key, -1*num)
+            print(num)
 
 def nxtRoomBtns(screen):
     if not roomsDLL.pointer:
@@ -226,6 +240,8 @@ def petHUD(screen):
     for element in hudElements:
         element.draw(screen)
     
+    firstStart()
+    updateTimers()
     updateBarsnLbls()
     nxtRoomBtns(screen)
 
@@ -300,12 +316,11 @@ def displayBedroom(screen):
     if interactWPet['dim']:
         screen.blit(transparent_surface, (0,0))
         petChoice.img = petChoice.hoverImg
-
-    else:
-        petChoice.img = petChoice.holdImg
-
     if sleepButton.draw(screen):
         interactWPet['dim'] = not interactWPet['dim']
+        if interactWPet['dim']: # called again to stop eye from opening while bird is tired then put to sleep
+            petChoice.img = petChoice.hoverImg
+
     if interactWPet['dim'] and not timers['sleep'].active:
         timers['sleep'].activate()
     elif not interactWPet['dim'] and timers['sleep'].active:
@@ -350,17 +365,15 @@ def updateBarsnLbls():
     cleanLabel.txt = f"Cleanliness: {petChoice.stats['clean']}%"
     energyLabel.txt = f"Energy: {petChoice.stats['energy']}%"
 
-    if moodBar.hp < petChoice.barMax // 2:
+    if moodBar.hp < petChoice.barMax // 3:
         moodLabel.txt = "Mood: Sad"
     else:
         moodLabel.txt = "Mood: Happy"
 
-    
 
-
-# petChoice.stats['health']
 def updateEnergy():
-    petChoice.changeStat('energy',interactWPet['addEnergy'])
+    if currentRoomLabel.txt == 'Bedroom':
+        petChoice.changeStat('energy',interactWPet['addEnergy'])
 
 def updateTimers():
     for key in timers.keys():

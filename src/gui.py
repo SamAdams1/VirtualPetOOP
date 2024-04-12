@@ -10,6 +10,8 @@ class Button:
         self.button.topleft = (x, y)
         self.clicked = False
 
+        self.disabled = False
+
     # def fix(self, screen):
     #     pygame.draw.rect(screen, (110, 110, 110), self.button)
     #     screen.blit(self.img, (self.button.x + 5, self.button.y + 5))
@@ -17,7 +19,7 @@ class Button:
     def draw(self, surface):
         action = False
         pos = pygame.mouse.get_pos()
-        if self.button.collidepoint(pos):
+        if self.button.collidepoint(pos) and not self.disabled:
             self.currentImg = self.hoverImg
             if pygame.mouse.get_pressed()[0] == 1 and not self.clicked:
                 self.clicked = True
