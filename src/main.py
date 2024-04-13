@@ -21,9 +21,7 @@ while running:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            print(rooms.petChoice)
             rooms.updateSaveData()
-            print('quiting')
             with open('save.txt', 'w') as store_data:
                 json.dump(rooms.saveData, store_data)
             running = False

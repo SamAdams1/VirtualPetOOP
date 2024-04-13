@@ -1,1 +1,0 @@
-{"name": "sam", "pet": "red", "room": "Bedroom", "health": 57, "hunger": 47, "clean": 50, "energy": 42, "mood": 43}
