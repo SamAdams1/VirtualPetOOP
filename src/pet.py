@@ -1,5 +1,5 @@
 import pygame
-import gui
+from src import gui
 
 class Pet(gui.Button):
     def __init__(self, name, color, x, y, img, hoverImg, barMax,sickImg=None, ):
@@ -26,4 +26,3 @@ class Pet(gui.Button):
                 self.stats[statIndex] = self.barMax
             elif self.stats[statIndex] < 0:
                 self.stats[statIndex] = 0
-

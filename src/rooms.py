@@ -1,8 +1,10 @@
+#Public Libraries
 import pygame
-import gui, pet
 import json
-import doublyLinkedList as dll
 import random
+# Modules I made
+from src import gui, pet
+from src import doublyLinkedList as dll
 
 
 #load pet images
@@ -27,7 +29,6 @@ birds = {
 }
 petChoice = birds["blue"]
 
-
 saveData = {
     "name": "",
     "pet": None,
@@ -38,7 +39,11 @@ saveData = {
     "energy": petChoice.stats["energy"],
     "mood": petChoice.stats["mood"],
 }
+
+
 def loadSave():
+    global petChoice
+    petChoice = birds[saveData["pet"]]
     petChoice.name = saveData["name"]
     petChoice.stats["health"] = saveData["health"]
     petChoice.stats["hunger"] = saveData["hunger"]
@@ -556,6 +561,9 @@ tutorialDict = {
         "txt": "Neglect your pet and bad things might happen!",
     },
     8:{
+        "txt": "Your game will autosave when you quit.",
+    },
+    9:{
         "txt": "Good luck caring for your pet!",
     },
 }
