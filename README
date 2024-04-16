@@ -1,54 +1,64 @@
-Virtual Pet Simulator
-Introduction:
+Documentation for the provided code:
+
+---
+
+### Virtual Pet Simulator
+
+#### Introduction:
 This code implements a simple virtual pet simulator using the Pygame library in Python. Players can interact with their virtual pets, caring for their needs in various rooms like Bedroom, Bathroom, Kitchen, etc.
 
-Features:
-Players can choose from three different colored birds as their pet.
-The pet's needs include health, hunger, cleanliness, energy, and mood.
-Players can navigate through different rooms using left and right buttons.
-Each room corresponds to one of the pet's needs.
-Neglecting the pet's needs may lead to adverse events.
-Code Structure:
-Initialization:
+#### Features:
+- Players can choose from three different colored birds as their pet.
+- The pet's needs include health, hunger, cleanliness, energy, and mood.
+- Players can navigate through different rooms using left and right buttons.
+- Each room corresponds to one of the pet's needs.
+- Neglecting the pet's needs may lead to adverse events.
 
-Initializes Pygame and sets up the screen.
-Loads necessary images and sets up the game window.
-Game Loop:
+#### Code Structure:
+1. **Initialization**: 
+    - Initializes Pygame and sets up the screen.
+    - Loads necessary images and sets up the game window.
 
-The main loop of the game where all interactions occur.
-Manages events such as quitting the game or key presses.
-Updates the display and maintains the game's frame rate.
-Rooms and Interactions:
+2. **Game Loop**:
+    - The main loop of the game where all interactions occur.
+    - Manages events such as quitting the game or key presses.
+    - Updates the display and maintains the game's frame rate.
 
-Defines different rooms such as Bedroom, Bathroom, Kitchen, etc.
-Manages interactions with the pet and updates its stats.
-Handles random events that can occur during gameplay.
-Pet Class:
+3. **Rooms and Interactions**:
+    - Defines different rooms such as Bedroom, Bathroom, Kitchen, etc.
+    - Manages interactions with the pet and updates its stats.
+    - Handles random events that can occur during gameplay.
 
-Defines the Pet class representing the virtual pet.
-Manages pet attributes such as name, color, and stats.
-GUI Components:
+4. **Pet Class**:
+    - Defines the Pet class representing the virtual pet.
+    - Manages pet attributes such as name, color, and stats.
 
-Implements GUI components like buttons, health bars, and labels.
-Controls the appearance and behavior of these components.
-Timers:
+5. **GUI Components**:
+    - Implements GUI components like buttons, health bars, and labels.
+    - Controls the appearance and behavior of these components.
 
-Manages timers for updating pet stats over time.
-Activates and deactivates timers based on game events.
-Tutorial and Help:
+6. **Timers**:
+    - Manages timers for updating pet stats over time.
+    - Activates and deactivates timers based on game events.
 
-Provides a tutorial for guiding players through the game.
-Displays helpful messages and instructions during gameplay.
-Data Management:
+7. **Tutorial and Help**:
+    - Provides a tutorial for guiding players through the game.
+    - Displays helpful messages and instructions during gameplay.
 
-Handles data loading and saving for game progress.
-Stores pet information and game state in JSON format.
-Doubly Linked List:
+8. **Data Management**:
+    - Handles data loading and saving for game progress.
+    - Stores pet information and game state in JSON format.
 
-Implements a doubly linked list for managing room navigation.
-Allows traversal between different rooms in a circular manner.
-Usage:
-Run the script to start the game.
-Choose a pet and provide a name.
-Interact with the pet by navigating through different rooms.
-Take care of the pet's needs to keep it happy and healthy.
+9. **Doubly Linked List**:
+    - Implements a doubly linked list for managing room navigation.
+    - Allows traversal between different rooms in a circular manner.
+
+#### Usage:
+1. Run the script to start the game.
+2. Choose a pet and provide a name.
+3. Interact with the pet by navigating through different rooms.
+4. Take care of the pet's needs to keep it happy and healthy.
+
+---
+
+This documentation provides an overview of the Virtual Pet Simulator codebase, explaining its features, structure, and usage.
