@@ -1,4 +1,5 @@
 ## Pet Simulator Documentation
+github: https://github.com/SamAdams1/VirtualPetOOP
 
 ### Introduction
 The Pet Simulator is a virtual pet simulation game developed using the Pygame library in Python. In this game, players can interact with virtual pets, take care of their needs, navigate through different rooms, and participate in various activities to keep their pets happy and healthy.
@@ -27,9 +28,9 @@ The Pet Simulator is designed to provide an engaging and interactive experience 
 ### Interacting with the Pet Simulator
 To interact with the Pet Simulator, players use mouse input to navigate menus, interact with buttons, and perform actions. Here's a basic guide on how to interact with the game:
 
-1. **Starting the Game**: Upon launching the game, players are presented with a start menu where they can choose to start the game or exit.
+1. **Starting the Game**: Upon launching the VirtualPet.exe, players are presented with a start menu.
 
-2. **Choosing a Pet**: After starting the game, players can choose a pet from three available options: blue, yellow, or red bird. Click on the desired bird to select it as your pet.
+2. **Choosing a Pet**: After starting the game, players can choose a pet from three available options: blue, yellow, or red bird. Click on the desired bird and click the "Enter" button to select it as your pet.
 
 3. **Naming Your Pet**: Once a pet is selected, players can enter a name for their pet. Type the desired name into the text box and click the "Enter" button to confirm.
 
@@ -37,7 +38,7 @@ To interact with the Pet Simulator, players use mouse input to navigate menus, i
 
 5. **Monitoring Pet Stats**: Keep an eye on the pet's health, hunger, cleanliness, energy, and mood bars displayed on the screen. Ensure that these bars stay within healthy ranges by taking appropriate actions in each room.
 
-6. **Dealing with Random Events**: Occasionally, random events may occur, such as the pet running away or losing its toy. Handle these events by following the on-screen instructions and taking appropriate actions.
+6. **Dealing with Random Events**: Occasionally, random events may occur, such as the pet running away or losing its toy. Handle these events by following the on-screen instructions.
 
 7. **Saving Progress**: The game automatically saves progress when exiting. Players can continue their game from where they left off the next time they launch the game.
 

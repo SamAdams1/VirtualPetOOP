@@ -50,6 +50,8 @@ def loadSave():
     petChoice.stats["clean"] = saveData["clean"]
     petChoice.stats["energy"] = saveData["energy"]
     petChoice.stats["mood"] = saveData["mood"]
+
+    
 try: 
     # the file already exists 
     with open("save.txt") as load_file: 
@@ -451,13 +453,14 @@ def lowerStats(statKey, reduceKey):
         petChoice.changeStat(statKey, reduceStats[reduceKey])
 
 def updateSaveData():
-    saveData["name"] = petChoice.name
-    saveData["room"] = currentRoomLabel.txt
-    saveData["health"] = petChoice.stats["health"]
-    saveData["hunger"] = petChoice.stats["hunger"]
-    saveData["clean"] = petChoice.stats["clean"]
-    saveData["energy"] = petChoice.stats["energy"]
-    saveData["mood"] = petChoice.stats["mood"]
+    if currentRoomLabel.txt != "start" and currentRoomLabel.txt != "choosePet":
+        saveData["name"] = petChoice.name
+        saveData["room"] = currentRoomLabel.txt
+        saveData["health"] = petChoice.stats["health"]
+        saveData["hunger"] = petChoice.stats["hunger"]
+        saveData["clean"] = petChoice.stats["clean"]
+        saveData["energy"] = petChoice.stats["energy"]
+        saveData["mood"] = petChoice.stats["mood"]
 
 def randomEventChance():
     num = random.randrange(0, 20)
