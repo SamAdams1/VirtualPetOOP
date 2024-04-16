@@ -34,6 +34,7 @@ while running:
 
     
     rooms.displayRooms(screen)
+    rooms.warningLabelBg(screen)
     rooms.warningLabel.draw(screen)
     # gui.drawCenteringLines()
 
